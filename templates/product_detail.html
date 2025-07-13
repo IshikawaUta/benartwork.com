@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - Benartwork{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-md-6">
+        {% if product.get('image_url') %}
+        <img src="{{ product.image_url }}" class="img-fluid rounded shadow-sm" alt="{{ product.name }}">
+        {% else %}
+        <img src="{{ url_for('static', filename='img/placeholder.png') }}" class="img-fluid rounded shadow-sm" alt="No Image">
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <h1 class="display-5 fw-bold">{{ product.name }}</h1>
+        <p class="lead text-primary fw-bold">$ {{ "%.2f"|format(product.price|float) }}</p>
+        <a class="nav-link animate-fade-in" href="https://www.instagram.com/benartwork777" target="_blank" aria-label="Instagram">
+            <i class="bi bi-instagram"></i> benartwork777
+        </a>
+        <hr>
+        <p class="product-description">{{ product.description }}</p>
+        <a href="{{ url_for('products') }}" class="btn btn-outline-red mt-3">Back to Products</a>
+    </div>
+</div>
+{% endblock %}

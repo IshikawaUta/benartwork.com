@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Error 404{% endblock %}
+
+{% block content %}
+
+    <style>
+    @font-face {
+    font-family: 'Pricedown';
+    src: url('../static/fonts/pricedown.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    }
+    </style>
+
+    <div class="container">
+        <h1 style="color: #ff0000; font-size: 5rem;">404</h1>
+        <h2 style="color: #ff0000;">Halaman Tidak Ditemukan</h2>
+        <p style="font-family: 'Pricedown';">Maaf, halaman yang Anda cari tidak ada. Mungkin URL yang Anda masukkan salah atau halaman tersebut telah dihapus.</p>
+        <p style="font-family: 'Pricedown';">Silakan kembali ke <a href="{{ url_for('index') }}" style="font-family: 'TTP';color: #ff0000;font-size: 1.5rem;">halaman utama</a>.</p>
+    </div>
+{% endblock %}

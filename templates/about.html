@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - Benartwork{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-4 fw-bold mb-4"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" style="background-color: #000000; width: 400px; border-radius: 10px;"></h1>
+    <p class="lead">
+        Welcome to Your Website! We are passionate about creating high-quality products and sharing valuable insights through our blog.
+    </p>
+    <p class="fs-5 mx-auto col-md-8">
+        Our mission is to deliver excellent products/services that meet your needs and exceed your expectations. We believe in innovation, customer satisfaction, and continuous improvement.
+    </p>
+    <p class="fs-5 mx-auto col-md-8">
+        Established in 2020, we have been serving our community with dedication and integrity. Our team is comprised of dedicated professionals who are experts in their respective fields.
+    </p>
+    <p class="fs-5 mx-auto col-md-8">
+        Thank you for visiting our website. Feel free to explore our products and blog, and don't hesitate to contact us if you have any questions!
+    </p>
+    <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg mt-4">Contact Us</a>
+</div>
+{% endblock %}

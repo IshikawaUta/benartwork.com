@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Add Product - Admin{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+<h1 class="mb-4">Add New Product</h1>
+<div class="card shadow-sm p-4 mb-4">
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        <div class="mb-3">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control", placeholder="Product Name") }}
+            {% if form.name.errors %}
+                {% for error in form.name.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.description.label(class="form-label") }}
+            {{ form.description(class="form-control", rows="5", placeholder="Product Description") }}
+            {% if form.description.errors %}
+                {% for error in form.description.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.price.label(class="form-label") }}
+            {{ form.price(class="form-control", type="number", step="0.01", placeholder="0.00") }}
+            {% if form.price.errors %}
+                {% for error in form.price.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.image.label(class="form-label") }}
+            {{ form.image(class="form-control", accept="image/*") }}
+            {% if form.image.errors %}
+                {% for error in form.image.errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+            {% endif %}
+            <div class="form-text">Max file size: 5MB. Allowed types: JPG, PNG.</div>
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+        <a href="{{ url_for('manage_products') }}" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+{% endblock %}

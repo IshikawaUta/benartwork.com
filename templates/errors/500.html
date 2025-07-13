@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Error Internal Server 500{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>500</h1>
+        <h2>Terjadi Kesalahan Internal Server</h2>
+        <p>Maaf, terjadi masalah pada server kami. Tim kami telah diberitahu dan sedang berusaha memperbaikinya.</p>
+        <p>Silakan coba lagi nanti atau kembali ke <a href="{{ url_for('index') }}">halaman utama</a>.</p>
+    </div>
+{% endblock %}

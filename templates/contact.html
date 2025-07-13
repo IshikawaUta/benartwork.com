@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Benartwork{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-center">Contact Us</h1>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="mt-4">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <p class="lead text-center">We'd love to hear from you! Please fill out the form below or reach out to us using the contact details.</p>
+        <div class="card shadow-sm p-4 mb-5">
+            <h4 class="card-title text-center mb-4">Send us a Message</h4>
+                <form method="POST">
+                    {{ form.csrf_token }} 
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control", placeholder="Nama Lengkap Anda", required=true) }}
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.name.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.email.label(class="form-label") }}
+                        {{ form.email(class="form-control", placeholder="alamat@email.com", required=true) }}
+                        {% if form.email.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.email.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.subject.label(class="form-label") }}
+                        {{ form.subject(class="form-control", placeholder="Subjek Pesan", required=true) }}
+                        {% if form.subject.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.subject.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.message.label(class="form-label") }}
+                        {{ form.message(class="form-control", rows="5", placeholder="Tulis pesan Anda di sini...", required=true) }}
+                        {% if form.message.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.message.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-2"> {{ form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-5 mb-3">
+    <div class="col-md-6 text-center">
+        <h4>Our Information</h4>
+        <p>Kota Tangerang, Jawa barat, Indonesia</p>
+        <a href="{{ url_for('index') }}" style="text-decoration: none;color: #ff0000;"><p>benartwork777.com</p></a>
+        <a href="https://www.instagram.com/benartwork777" style="text-decoration: none;color: #ff0000;"><p>Benartwork777</p></a>
+        </div>
+</div>
+{% endblock %}

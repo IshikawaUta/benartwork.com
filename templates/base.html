@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if seo %}{{ seo.title }}{% else %}{% block title %}Benartwork | Growth, Goals, Achievements{% endblock %}{% endif %}</title>
+    <meta name="description" content="{% if seo %}{{ seo.description }}{% else %}Discover captivating digital illustrations and traditional art by Benartwork. Specializing in character design, editorial art, and custom commissions. Bring your vision to life with unique artwork.{% endif %}">
+    <meta name="keywords" content="{% if seo %}{{ seo.keywords }}{% else %}Benartwork, benartwork777, Freelancer, Illustrator, art, digital illustrations, traditional art, character design, editorial art, custom commissions{% endif %}">
+    <meta name="author" content="Benartwork">
+    <meta property="og:title" content="{% if seo and seo.title %}{{ seo.title }}{% else %}{{ self.title() }}{% endif %}">
+    <meta property="og:description" content="{% if seo %}{{ seo.description }}{% else %}Discover captivating digital illustrations and traditional art by Benartwork. Specializing in character design, editorial art, and custom commissions. Bring your vision to life with unique artwork.{% endif %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:image" content="{{ url_for('static', filename='img/social_share_default.jpg', _external=True) }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% if seo and seo.title %}{{ seo.title }}{% else %}{{ self.title() }}{% endif %}">
+    <meta name="twitter:description" content="{% if seo and seo.description %}{{ seo.description }}{% else %}Discover captivating digital illustrations and traditional art by Benartwork. Specializing in character design, editorial art, and custom commissions. Bring your vision to life with unique artwork.{% endif %}">
+    <meta name="twitter:image" content="{% if seo and seo.image %}{{ seo.image }}{% else %}{{ url_for('static', filename='img/social_share_default.jpg', _external=True) }}{% endif %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand animate-fade-in" href="{{ url_for('index') }}">Benartwork</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %} animate-slide-in-left" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'products' %}active{% endif %} animate-slide-in-left" href="{{ url_for('products') }}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'blog' %}active{% endif %} animate-slide-in-left" href="{{ url_for('blog') }}">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'about' %}active{% endif %} animate-slide-in-left" href="{{ url_for('about') }}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'contact' %}active{% endif %} animate-slide-in-left" href="{{ url_for('contact') }}">Contact</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="navbar-brand animate-fade-in" style="color: #ff0000;" href="https://www.instagram.com/benartwork777" target="_blank" aria-label="Instagram">
+                            <i class="bi bi-instagram"></i> benartwork777
+                        </a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-light btn-sm ms-2" href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-danger btn-sm ms-2" href="{{ url_for('admin_logout') }}">Logout</a>
+                    </li>
+                    {% else %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-dark text-white">
+        <div class="container text-center text-white">
+            <span class="text-white">&copy; <span id="currentYear"></span> Benartwork. All rights reserved. By<a href="https://ekasaputra.my.id" style="color: #ff0000;"> IshikawaUta</a></span>
+        </div>
+    </footer>
+
+    <button id="scrollToTopBtn" title="Go to top">⬆<br>UP</button>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const currentYearSpan = document.getElementById('currentYear');
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+            }
+        });
+    </script>
+</body>
+</html>

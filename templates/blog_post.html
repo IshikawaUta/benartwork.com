@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} - Benartwork Blog{% endblock %}
+
+{% block content %}
+<article class="blog-post">
+    <h1 class="display-5 fw-bold mb-3">{{ post.title }}</h1>
+    <p class="blog-post-meta text-muted">
+        By {{ post.author }} on {{ post.date.strftime('%d %B %Y') }}
+        {% if post.get('last_updated') %}
+        (Last updated: {{ post.last_updated.strftime('%d %B %Y') }})
+        {% endif %}
+    </p>
+
+    {% if post.get('image_url') %}
+    <img src="{{ post.image_url }}" class="img-fluid rounded mb-4 shadow-sm" width="50%" height="50%" alt="{{ post.title }}">
+    {% else %}
+    <img src="{{ url_for('static', filename='img/placeholder.png') }}" class="img-fluid rounded mb-4 shadow-sm" alt="No Image">
+    {% endif %}
+
+    <div class="blog-content">
+        <p class="product-description" style="font-size: 1.3rem;">{{ post.content }}</p>
+        </div>
+    <hr>
+    <a href="{{ url_for('blog') }}" class="btn btn-outline-red mt-3 mb-4">Back to Blog</a>
+</article>
+{% endblock %}

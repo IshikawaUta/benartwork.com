@@ -1,0 +1,280 @@
+/* Definisi Font Diploma */
+@font-face {
+    font-family: 'TTP';
+    src: url('../fonts/TrumpTownPro.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Custom CSS Anda di sini */
+body {
+    font-family: 'TTP', Arial;
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.footer {
+    width: 100%;
+    margin-top: auto; /* Push footer to the bottom */
+}
+
+/* Penyesuaian untuk kartu (opsional) */
+.card-img-top {
+    width: 100%;
+    object-fit: cover;
+    height: 180px; /* Tinggi yang konsisten untuk gambar kartu */
+}
+
+/* Jumbotron di homepage */
+.jumbotron {
+    background-color: #f8f9fa; /* Light background */
+    border-radius: .3rem;
+    padding: 4rem 2rem;
+}
+
+/* Margin atas untuk bagian konten setelah navbar */
+.container.mt-4 {
+    margin-top: 1.5rem !important;
+    flex-grow: 1; /* Allow content to grow and push footer down */
+}
+
+/* Navbar links active state */
+.navbar-nav .nav-link.active {
+    font-weight: bold;
+    color: #fd0000 !important; /* Warna Bootstrap primary */
+}
+
+/* Admin button styles */
+.navbar-nav .btn-outline-light {
+    color: #f8f9fa;
+    border-color: #f8f9fa;
+}
+.navbar-nav .btn-outline-light:hover {
+    color: #ff0000;
+    background-color: #f8f9fa;
+}
+
+.navbar-nav .btn-outline-danger {
+    color: #ff0000;
+    border-color: #ff0000;
+}
+.navbar-nav .btn-outline-danger:hover {
+    color: #fff;
+    background-color: #ff0000;
+}
+
+.navbar-nav .btn-outline-success {
+    color: #198754;
+    border-color: #198754;
+}
+.navbar-nav .btn-outline-success:hover {
+    color: #fff;
+    background-color: #198754;
+}
+
+/* Ensure images have maximum width within their containers */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* --- Gaya Paginasi Kustom --- */
+.pagination {
+    --bs-pagination-color: #6c757d; /* Warna teks default */
+    --bs-pagination-hover-color: #ff0000; /* Warna teks saat hover */
+    --bs-pagination-active-bg: #ff0000; /* Background tombol aktif */
+    --bs-pagination-active-border-color: #ff0000; /* Border tombol aktif */
+    --bs-pagination-disabled-color: #adb5bd; /* Warna teks tombol non-aktif */
+    --bs-pagination-border-color: #dee2e6; /* Warna border tombol */
+    --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(253, 0, 0, 0.25);
+}
+
+.pagination .page-item .page-link {
+    border-radius: 0.375rem; /* Sudut membulat */
+    margin: 0 4px; /* Jarak antar tombol */
+    transition: all 0.2s ease-in-out; /* Transisi halus */
+    min-width: 38px; /* Pastikan semua tombol memiliki lebar yang konsisten */
+    text-align: center;
+    color: var(--bs-pagination-color);
+    border: 1px solid var(--bs-pagination-border-color);
+}
+
+.pagination .page-item.active .page-link,
+.pagination .page-item .page-link:hover {
+    background-color: var(--bs-pagination-hover-color);
+    border-color: var(--bs-pagination-hover-color);
+    color: #fff; /* Teks putih untuk tombol aktif/hover */
+    box-shadow: var(--bs-pagination-focus-box-shadow);
+}
+
+.pagination .page-item.disabled .page-link {
+    color: var(--bs-pagination-disabled-color);
+    pointer-events: none; /* Nonaktifkan klik */
+    background-color: transparent; /* Pastikan tidak ada warna background saat disabled */
+    border-color: var(--bs-pagination-border-color);
+    box-shadow: none;
+}
+
+/* Animasi untuk pagination (opsional, bisa dihapus jika terlalu banyak) */
+.pagination {
+    animation: fadeIn 1s ease-out forwards;
+}
+
+/* --- Scroll to Top Button --- */
+#scrollToTopBtn {
+    display: none; /* Sembunyikan secara default */
+    position: fixed; /* Tetap di posisi yang sama saat menggulir */
+    bottom: 20px; /* Jarak dari bawah */
+    right: 20px; /* Jarak dari kanan */
+    z-index: 99; /* Pastikan di atas elemen lain */
+    border: none; /* Hapus border */
+    outline: none; /* Hapus outline saat fokus */
+    background-color: #ff0000; /* Warna latar belakang (Bootstrap primary) */
+    color: white; /* Warna teks/ikon */
+    cursor: pointer; /* Ubah kursor menjadi pointer saat di-hover */
+    padding: 15px; /* Padding */
+    border-radius: 50%; /* Bentuk lingkaran */
+    font-size: 18px; /* Ukuran font/ikon */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sedikit bayangan */
+    transition: background-color 0.3s, transform 0.3s, opacity 0.3s; /* Transisi halus */
+}
+
+#scrollToTopBtn:hover {
+    background-color: #d70b0b; /* Warna lebih gelap saat di-hover */
+    transform: translateY(-3px); /* Efek sedikit terangkat */
+}
+
+/* --- Animations --- */
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+}
+
+/* Slide In From Left Animation */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-in-left {
+    animation: slideInLeft 0.7s ease-out forwards;
+    /* Add a delay to stagger the navigation links */
+    animation-delay: var(--animation-delay, 0s);
+}
+
+/* New: Slide In From Up Animation */
+@keyframes slideInUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-in-up {
+    animation: slideInUp 0.8s ease-out forwards;
+    animation-delay: var(--animation-delay, 0s);
+}
+
+/* New: Slide In From Right Animation */
+@keyframes slideInRight {
+    from {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-in-right {
+    animation: slideInRight 0.8s ease-out forwards;
+    animation-delay: var(--animation-delay, 0s);
+}
+
+
+/* Stagger animation for navigation links */
+.navbar-nav .nav-item:nth-child(1) .animate-slide-in-left { --animation-delay: 0.1s; }
+.navbar-nav .nav-item:nth-child(2) .animate-slide-in-left { --animation-delay: 0.2s; }
+.navbar-nav .nav-item:nth-child(3) .animate-slide-in-left { --animation-delay: 0.3s; }
+.navbar-nav .nav-item:nth-child(4) .animate-slide-in-left { --animation-delay: 0.4s; }
+.navbar-nav .nav-item:nth-child(5) .animate-slide-in-left { --animation-delay: 0.5s; }
+
+/* Instagram Icon Styling */
+.navbar-nav .bi-instagram {
+    font-size: 1.5rem; /* Adjust size as needed */
+    color: #ff0000; /* Instagram brand color */
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar-nav .bi-instagram:hover {
+    transform: scale(1.2); /* Pop effect on hover */
+    color: #ff0000; /* Slightly darker on hover */
+}
+
+/* General hover effect for navbar brand */
+.navbar-brand:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Featurette section specific styles */
+.featurette-heading {
+    letter-spacing: -.05rem;
+}
+.featurette-divider {
+    margin: 5rem 0; /* Space out the Bootstrap <hr> */
+}
+.btn-primary {
+    background-color: #ff0000 !important;
+    border-color: #ff0000;
+}
+.btn-primary:hover {
+    background-color: #ffffff !important;
+    border-color: #ffffff;
+    color: #ff0000;
+    border-color: #ff0000;
+}
+.bg-primary {
+    background-color: #ff0000 !important;
+    border-color: #ff0000;
+}
+.bg-primary:hover {
+    background-color: #ff0000 !important;
+    border-color: #ff0000;
+}
+.product-description {
+    white-space: pre-wrap;
+}
+.btn-outline-red {
+    color: #ff0000;
+    border-color: #ff0000;
+}
+.btn-outline-red:hover {
+    color: #ffffff;
+    border-color: #ff0000;
+    background-color: #ff0000;
+}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Blog - Benartwork{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-center">Our Blog</h1>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+    {% for post in posts %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            {% if post.get('image_url') %}
+            <img src="{{ post.image_url }}" class="card-img-top" alt="{{ post.title }}" style="height: 180px; object-fit: cover;">
+            {% else %}
+            <img src="{{ url_for('static', filename='img/placeholder.png') }}" class="card-img-top" alt="No Image" style="height: 180px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text text-muted">{{ post.content[:100] }}{% if post.content|length > 100 %}...{% endif %}</p>
+                <p class="card-text mt-auto"><small class="text-muted">By {{ post.author }} on {{ post.date.strftime('%d %b %Y') }}</small></p>
+                <a href="{{ url_for('blog_post', post_id=post._id) }}" class="btn btn-primary btn-sm mt-2">Read More</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center">
+        <p class="lead text-muted">Belum ada postingan blog.</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% if total_pages > 1 %}
+<nav aria-label="Blog post pagination">
+    <ul class="pagination justify-content-center">
+        <li class="page-item {% if page == 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for('blog', page=1) }}" aria-label="First">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item {% if page == 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for('blog', page=page-1) }}" aria-label="Previous">
+                <span aria-hidden="true">&lsaquo;</span>
+            </a>
+        </li>
+        {% for p in range(1, total_pages + 1) %}
+        <li class="page-item {% if p == page %}active{% endif %}">
+            <a class="page-link" href="{{ url_for('blog', page=p) }}">{{ p }}</a>
+        </li>
+        {% endfor %}
+        <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for('blog', page=page+1) }}" aria-label="Next">
+                <span aria-hidden="true">&rsaquo;</span>
+            </a>
+        </li>
+        <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for('blog', page=total_pages) }}" aria-label="Last">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

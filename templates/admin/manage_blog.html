@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Blog Posts - Admin{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Manage Blog Posts</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('add_blog_post') }}" class="btn btn-success">Add New Post</a>
+    </div>
+</div>
+
+{% if posts %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Image</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Date</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>
+                    {% if post.get('image_url') %}
+                    <img src="{{ post.image_url }}" alt="{{ post.title }}" style="width: 50px; height: 50px; object-fit: cover;">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='img/placeholder.png') }}" alt="No Image" style="width: 50px; height: 50px; object-fit: cover;">
+                    {% endif %}
+                </td>
+                <td>{{ post.title }}</td>
+                <td>{{ post.author }}</td>
+                <td>{{ post.date.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    <a href="{{ url_for('edit_blog_post', post_id=post._id) }}" class="btn btn-sm btn-info me-2">Edit</a>
+                    <a href="{{ url_for('delete_blog_post', post_id=post._id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this blog post?');">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="lead text-muted text-center mt-5">No blog posts found. Start by adding one!</p>
+{% endif %}
+{% endblock %}

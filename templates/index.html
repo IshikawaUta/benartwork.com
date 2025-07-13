@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Benartwork{% endblock %}
+
+{% block content %}
+<div class="p-5 mb-4 bg-light rounded-3 animate-fade-in">
+    <div class="container-fluid py-5 text-center">
+        <h1 class="display-4 fw-bold animate-slide-in-up"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" style="background-color: #000000; width: 400px; border-radius: 10px;"></h1>
+        <p class="fs-5 col-md-8 mx-auto animate-slide-in-up" style="animation-delay: 0.2s;">Discover our amazing products and read our latest blog posts. We are dedicated to providing you with the best experience.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
+            <a class="btn btn-primary btn-lg px-4 me-sm-3 animate-slide-in-right" href="{{ url_for('products') }}" role="button" style="animation-delay: 0.4s;">View Products</a>
+            <a class="btn btn-outline-red btn-lg px-4 animate-slide-in-right" href="{{ url_for('blog') }}" role="button" style="animation-delay: 0.6s;">Read Blog</a>
+        </div>
+    </div>
+</div>
+
+<h2 class="mt-5 mb-3 text-center animate-fade-in" style="animation-delay: 0.8s;">Featured Products</h2>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-5">
+    {% for product in products %}
+    <div class="col animate-slide-in-up" style="animation-delay: {{ loop.index * 0.1 + 0.8 }}s;">
+        <div class="card h-100 shadow-sm">
+            {% if product.get('image_url') %}
+            <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <img src="{{ url_for('static', filename='img/placeholder.png') }}" class="card-img-top" alt="No Image" style="height: 200px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text text-muted">{{ product.description[:70] }}{% if product.description|length > 70 %}...{% endif %}</p>
+                <p class="card-text fw-bold mt-auto">$ {{ "%.2f"|format(product.price|float) }}</p>
+                <a href="{{ url_for('product_detail', product_id=product._id) }}" class="btn btn-primary btn-sm mt-2">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center animate-fade-in" style="animation-delay: 0.8s;">
+        <p class="text-muted">Belum ada produk yang tersedia.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<h2 class="mt-5 mb-3 text-center animate-fade-in" style="animation-delay: {{ (products|length * 0.1) + 1 }}s;">Latest Blog Posts</h2>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+    {% for post in recent_posts %}
+    <div class="col animate-slide-in-up" style="animation-delay: {{ (loop.index * 0.1) + (products|length * 0.1) + 1 }}s;">
+        <div class="card h-100 shadow-sm">
+            {% if post.get('image_url') %}
+            <img src="{{ post.image_url }}" class="card-img-top" alt="{{ post.title }}" style="height: 180px; object-fit: cover;">
+            {% else %}
+            <img src="{{ url_for('static', filename='img/placeholder.png') }}" class="card-img-top" alt="No Image" style="height: 180px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text text-muted">{{ post.content[:100] }}{% if post.content|length > 100 %}...{% endif %}</p>
+                <p class="card-text mt-auto"><small class="text-muted">By {{ post.author }} on {{ post.date.strftime('%d %b %Y') }}</small></p>
+                <a href="{{ url_for('blog_post', post_id=post._id) }}" class="btn btn-primary btn-sm mt-2">Read More</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center animate-fade-in" style="animation-delay: {{ (products|length * 0.1) + 1 }}s;">
+        <p class="text-muted">Belum ada postingan blog yang tersedia.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
