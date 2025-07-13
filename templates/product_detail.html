@@ -2,6 +2,21 @@
 
 {% block title %}{{ product.name }} - Benartwork{% endblock %}
 
+{% block head_meta %}
+    {# Open Graph Meta Tags for Sharing #}
+    <meta name="description" content="{{ product.description | striptags | truncate(150, True, '...') }}">
+    <meta property="og:title" content="{{ product.name }}" />
+    <meta property="og:description" content="{{ product.description | striptags | truncate(150, True, '...') }}" />
+    <meta property="og:image" content="{{ product.image_url }}" /> {# Ambil gambar pertama #}
+    <meta property="og:url" content="{{ request.url }}" />
+    <meta property="og:type" content="product" />
+    {# Optional: Twitter Card Meta Tags #}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ product.name }}">
+    <meta name="twitter:description" content="{{ product.description | striptags | truncate(150, True, '...') }}">
+    <meta name="twitter:image" content="{{ product.image_url }}"> {# Ambil gambar pertama #}
+{% endblock %}
+
 {% block content %}
 <div class="row mb-5">
     <div class="col-md-6">

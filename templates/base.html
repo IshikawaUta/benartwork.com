@@ -3,23 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if seo %}{{ seo.title }}{% else %}{% block title %}Benartwork | Growth, Goals, Achievements{% endblock %}{% endif %}</title>
-    <meta name="description" content="{% if seo %}{{ seo.description }}{% else %}Discover captivating digital illustrations and traditional art by Benartwork. Specializing in character design, editorial art, and custom commissions. Bring your vision to life with unique artwork.{% endif %}">
+    <title>{% if seo %}{{ seo.title }}{% else %}{% block title %}Benartwork | Growth, Goals, Achievements, Goods!!!{% endblock %}{% endif %}</title>
+    <meta name="description" content="{% if seo %}{{ seo.description }}{% else %}Discover captivating digital illustrations and traditional art by Benartwork. Specializing in character design, editorial art, and custom commissions.{% endif %}">
     <meta name="keywords" content="{% if seo %}{{ seo.keywords }}{% else %}Benartwork, benartwork777, Freelancer, Illustrator, art, digital illustrations, traditional art, character design, editorial art, custom commissions{% endif %}">
     <meta name="author" content="Benartwork">
     <meta property="og:title" content="{% if seo and seo.title %}{{ seo.title }}{% else %}{{ self.title() }}{% endif %}">
-    <meta property="og:description" content="{% if seo %}{{ seo.description }}{% else %}Discover captivating digital illustrations and traditional art by Benartwork. Specializing in character design, editorial art, and custom commissions. Bring your vision to life with unique artwork.{% endif %}">
+    <meta property="og:description" content="{% if seo %}{{ seo.description }}{% else %}Discover captivating digital illustrations and traditional art by Benartwork. Specializing in character design, editorial art, and custom commissions.{% endif %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.url }}">
     <meta property="og:image" content="{{ url_for('static', filename='img/social_share_default.jpg', _external=True) }}">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% if seo and seo.title %}{{ seo.title }}{% else %}{{ self.title() }}{% endif %}">
-    <meta name="twitter:description" content="{% if seo and seo.description %}{{ seo.description }}{% else %}Discover captivating digital illustrations and traditional art by Benartwork. Specializing in character design, editorial art, and custom commissions. Bring your vision to life with unique artwork.{% endif %}">
+    <meta name="twitter:description" content="{% if seo and seo.description %}{{ seo.description }}{% else %}Discover captivating digital illustrations and traditional art by Benartwork. Specializing in character design, editorial art, and custom commissions.{% endif %}">
     <meta name="twitter:image" content="{% if seo and seo.image %}{{ seo.image }}{% else %}{{ url_for('static', filename='img/social_share_default.jpg', _external=True) }}{% endif %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    {% block head %}
+    {# Ini adalah blok khusus untuk meta tag Open Graph/Twitter #}
+    {% block head_meta %}
+        {# Konten untuk Open Graph dan Twitter meta tags akan dimasukkan di sini oleh template anak #}
+    {% endblock %}
+    {% endblock %}
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

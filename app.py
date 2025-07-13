@@ -119,7 +119,7 @@ def index():
     products = list(products_collection.find().limit(4)) # Konversi ke list di sini
     recent_posts = list(blog_collection.find().sort("date", -1).limit(3))
     seo_data = {
-        'title': 'Home - Benartwork',
+        'title': 'Benartwork | Growth, Goals, Achievements, Goods!!!',
         'description': 'Discover captivating digital illustrations and traditional art by Benartwork. Specializing in character design, editorial art, and custom commissions. Bring your vision to life with unique artwork.',
         'keywords': 'Benartwork, benartwork777, Freelancer, Illustrator, art, digital illustrations, traditional art, character design, editorial art, custom commissions'
     }

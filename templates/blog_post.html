@@ -2,6 +2,38 @@
 
 {% block title %}{{ post.title }} - Benartwork Blog{% endblock %}
 
+{% block head_meta %}
+    {# Meta Tags Standar #}
+    <meta name="description" content="{{ post.content | striptags | truncate(150, True, '...') }}">
+
+    {# Open Graph Meta Tags for Sharing #}
+    <meta property="og:title" content="{{ post.title }}" />
+    <meta property="og:description" content="{{ post.content | striptags | truncate(150, True, '...') }}" />
+    <meta property="og:image" content="{% if post.image_url %}{{ post.image_url }}{% else %}{{ url_for('static', filename='img/blog_default_share.jpg', _external=True) }}{% endif %}" /> {# Jika ada gambar postingan #}
+    <meta property="og:url" content="{{ request.url }}" />
+    <meta property="og:type" content="article" /> {# Ubah type menjadi 'article' untuk postingan blog #}
+
+    {# Optional: Twitter Card Meta Tags #}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ post.title }}">
+    <meta name="twitter:description" content="{{ post.content | striptags | truncate(150, True, '...') }}">
+    <meta name="twitter:image" content="{% if post.image_url %}{{ post.image_url }}{% else %}{{ url_for('static', filename='img/blog_default_share.jpg', _external=True) }}{% endif %}"> {# Jika ada gambar postingan #}
+
+    {# Optional: Article specific meta tags #}
+    <meta property="article:published_time" content="{{ post.date.isoformat() }}Z" /> {# Sesuaikan jika field tanggal berbeda #}
+    {% if post.last_updated %}
+    <meta property="article:modified_time" content="{{ post.last_updated.isoformat() }}Z" /> {# Jika ada tanggal update #}
+    {% endif %}
+    <meta property="article:author" content="{{ post.author }}" /> {# Nama penulis #}
+    {# Jika Anda memiliki tag/kategori untuk blog post: #}
+    {% if post.tags %}
+        {% for tag in post.tags %}
+        <meta property="article:tag" content="{{ tag }}" />
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
+
 {% block content %}
 <article class="blog-post">
     <h1 class="display-5 fw-bold mb-3">{{ post.title }}</h1>
@@ -22,6 +54,9 @@
         <p class="product-description" style="font-size: 1.3rem;">{{ post.content }}</p>
         </div>
     <hr>
+    <a class="nav-link animate-fade-in" href="https://www.instagram.com/benartwork777" target="_blank" aria-label="Instagram">
+        <i class="bi bi-instagram"></i> benartwork777
+    </a>
     <a href="{{ url_for('blog') }}" class="btn btn-outline-red mt-3 mb-4">Back to Blog</a>
 </article>
 {% endblock %}
