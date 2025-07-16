@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, make_response
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session
 from pymongo import MongoClient
 import cloudinary
 from cloudinary.uploader import upload
@@ -6,11 +6,11 @@ from cloudinary.utils import cloudinary_url
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, DecimalField, FileField, PasswordField, SubmitField
+from wtforms import StringField, TextAreaField, DecimalField, FileField, PasswordField, SubmitField, IntegerField
 from wtforms.validators import DataRequired, Length, NumberRange
 from config import Config
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from math import ceil
 from bson.objectid import ObjectId
 from flask_mail import Mail, Message # Import Flask-Mail
@@ -105,7 +105,18 @@ class ContactForm(FlaskForm):
     message = TextAreaField('Pesan Anda', validators=[DataRequired(), Length(min=10)])
     submit = SubmitField('Kirim Pesan')
 
+# New form for adding to cart
+class AddToCartForm(FlaskForm):
+    quantity = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=1)])
+    submit = SubmitField('Add to Cart')
+
 # --- Routes ---
+
+@app.before_request
+def make_session_permanent():
+    # Make the session permanent and set a timeout
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(days=30) # Example: session lasts 30 days
 
 # Header Flask
 @app.after_request
@@ -116,14 +127,15 @@ def add_header(response):
 # Public Routes
 @app.route('/')
 def index():
-    products = list(products_collection.find().limit(4)) # Konversi ke list di sini
+    products = list(products_collection.find().limit(4))
     recent_posts = list(blog_collection.find().sort("date", -1).limit(3))
     seo_data = {
         'title': 'Benartwork | Growth, Goals, Achievements, Goods!!!',
         'description': 'Discover captivating digital illustrations and traditional art by Benartwork. Specializing in character design, editorial art, and custom commissions. Bring your vision to life with unique artwork.',
         'keywords': 'Benartwork, benartwork777, Freelancer, Illustrator, art, digital illustrations, traditional art, character design, editorial art, custom commissions'
     }
-    return render_template('index.html', products=products, recent_posts=recent_posts, seo=seo_data)
+    cart_items_count = sum(item['quantity'] for item in session.get('cart', []))
+    return render_template('index.html', products=products, recent_posts=recent_posts, seo=seo_data, cart_items_count=cart_items_count)
 
 @app.route('/products')
 def products():
@@ -148,17 +160,40 @@ def products():
                            per_page=per_page,
                            seo=seo_data)
 
-@app.route('/product/<product_id>')
+@app.route('/product/<product_id>', methods=['GET', 'POST'])
 def product_detail(product_id):
+    form = AddToCartForm()
     try:
         product = products_collection.find_one({"_id": ObjectId(product_id)})
         if product:
+            if form.validate_on_submit():
+                quantity = form.quantity.data
+                cart = session.get('cart', [])
+                found_in_cart = False
+                for item in cart:
+                    if item['product_id'] == product_id:
+                        item['quantity'] += quantity
+                        found_in_cart = True
+                        break
+                if not found_in_cart:
+                    cart.append({
+                        'product_id': product_id,
+                        'name': product['name'],
+                        'price': float(product['price']),
+                        'image_url': product.get('image_url'),
+                        'quantity': quantity
+                    })
+                session['cart'] = cart
+                flash(f'{quantity} of {product["name"]} added to cart!', 'success')
+                return redirect(url_for('product_detail', product_id=product_id))
+
             seo_data = {
                 'title': f"{product.get('name', 'Detail Produk')} - Benartwork",
                 'description': product.get('description', '')[:160] + '...',
                 'keywords': f"produk, {product.get('name', '')}, beli, harga"
             }
-            return render_template('product_detail.html', product=product, seo=seo_data)
+            cart_items_count = sum(item['quantity'] for item in session.get('cart', []))
+            return render_template('product_detail.html', product=product, seo=seo_data, form=form, cart_items_count=cart_items_count)
         else:
             flash('Produk tidak ditemukan.', 'danger')
             app.logger.warning(f"Product not found for ID: {product_id}")
@@ -167,6 +202,94 @@ def product_detail(product_id):
         app.logger.error(f"Invalid product ID or database error for ID {product_id}: {e}", exc_info=True)
         flash('Terjadi kesalahan saat memuat detail produk. ID tidak valid.', 'danger')
         return redirect(url_for('products'))
+    
+@app.route('/cart')
+def view_cart():
+    cart = session.get('cart', [])
+    total_price = sum(item['price'] * item['quantity'] for item in cart)
+    seo_data = {
+        'title': 'Shopping Cart - Benartwork',
+        'description': 'Review your shopping cart and proceed to checkout.',
+        'keywords': 'cart, shopping, checkout, items'
+    }
+    cart_items_count = sum(item['quantity'] for item in session.get('cart', []))
+    return render_template('cart.html', cart=cart, total_price=total_price, seo=seo_data, cart_items_count=cart_items_count)
+
+@app.route('/cart/remove/<product_id>')
+def remove_from_cart(product_id):
+    cart = session.get('cart', [])
+    new_cart = [item for item in cart if item['product_id'] != product_id]
+    if len(new_cart) < len(cart):
+        session['cart'] = new_cart
+        flash('Item removed from cart.', 'info')
+    else:
+        flash('Item not found in cart.', 'warning')
+    return redirect(url_for('view_cart'))
+
+@app.route('/cart/update/<product_id>', methods=['POST'])
+def update_cart_quantity(product_id):
+    quantity = request.form.get('quantity', type=int)
+    if quantity is None or quantity < 1:
+        flash('Invalid quantity.', 'danger')
+        return redirect(url_for('view_cart'))
+
+    cart = session.get('cart', [])
+    for item in cart:
+        if item['product_id'] == product_id:
+            item['quantity'] = quantity
+            break
+    session['cart'] = cart
+    flash('Cart updated.', 'success')
+    return redirect(url_for('view_cart'))
+
+@app.route('/checkout-instagram')
+def checkout_to_instagram():
+    cart = session.get('cart', [])
+    if not cart:
+        flash('Your cart is empty. Add items before checkout.', 'warning')
+        return redirect(url_for('products'))
+
+    total_price = sum(item['price'] * item['quantity'] for item in cart)
+
+    # Buat pesan detail pesanan untuk disalin pengguna
+    order_details_message = "Order Details Benartwork:\n\n"
+    for i, item in enumerate(cart):
+        # Menggunakan .get() untuk akses yang lebih aman jika ada item yang hilang key
+        product_name = item.get('name', 'Produk Tidak Dikenal')
+        quantity = item.get('quantity', 0)
+        price = item.get('price', 0.0)
+        subtotal = quantity * price
+        order_details_message += f"{i+1}. {product_name} (x{quantity}) - ${price:,.0f} = ${subtotal:,.0f}\n"
+
+    order_details_message += f"\nTotal price: ${total_price:,.0f}\n\n"
+    order_details_message += "Please confirm this order via Instagram DM @benartwork777.\n"
+    order_details_message += "We will reply with payment and shipping details.\n"
+    order_details_message += f"Order Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+    # Anda bisa tambahkan info pengguna jika mereka login:
+    # if current_user.is_authenticated:
+    #     order_details_message += f"Nama Pengguna: {current_user.username}\n"
+    #     order_details_message += f"Email: {current_user.email}\n"
+
+    # Hapus keranjang setelah detail pesanan disiapkan
+    # Ini opsional, tergantung apakah Anda ingin keranjang langsung kosong atau tetap ada sampai pembayaran dikonfirmasi
+    session.pop('cart', None)
+    flash('Your order details have been prepared. Please proceed to Instagram!', 'info')
+
+    # Konfigurasi username Instagram Anda
+    instagram_username = "benartwork777" # Ganti dengan username Instagram Anda
+
+    seo_data = {
+        'title': 'Complete Your Order - Benartwork',
+        'description': 'Complete Your Order on Instagram.',
+        'keywords': 'checkout, instagram, order, complete'
+    }
+    # cart_items_count akan 0 setelah session.pop('cart', None)
+    cart_items_count = sum(item['quantity'] for item in session.get('cart', []))
+    return render_template('instagram_checkout.html',
+                           full_message=order_details_message,
+                           instagram_username=instagram_username,
+                           seo=seo_data,
+                           cart_items_count=cart_items_count)
 
 @app.route('/blog')
 def blog():

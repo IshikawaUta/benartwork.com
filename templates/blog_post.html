@@ -45,7 +45,8 @@
     </p>
 
     {% if post.get('image_url') %}
-    <img src="{{ post.image_url }}" class="img-fluid rounded mb-4 shadow-sm" width="50%" height="50%" alt="{{ post.title }}">
+    <img src="{{ post.image_url }}" class="img-fluid rounded mb-3 shadow-sm" width="50%" height="50%" alt="{{ post.title }}"><br>
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" style="background-color: #000000; width: 180px; border-radius: 10px;" class="mb-3">
     {% else %}
     <img src="{{ url_for('static', filename='img/placeholder.png') }}" class="img-fluid rounded mb-4 shadow-sm" alt="No Image">
     {% endif %}

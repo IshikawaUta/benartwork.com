@@ -54,6 +54,14 @@
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('view_cart') }}" style="color: #ffffff;margin-right: 1rem;">
+                            <i class="bi bi-cart"></i> Cart
+                            {% if cart_items_count %}
+                                <span class="badge bg-danger rounded-pill">{{ cart_items_count }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="navbar-brand animate-fade-in" style="color: #ff0000;" href="https://www.instagram.com/benartwork777" target="_blank" aria-label="Instagram">
                             <i class="bi bi-instagram"></i> benartwork777
                         </a>

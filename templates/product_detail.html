@@ -34,6 +34,19 @@
         </a>
         <hr>
         <p class="product-description fs-6">{{ product.description }}</p>
+
+        <form method="POST" action="{{ url_for('product_detail', product_id=product._id) }}" class="mt-3">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.quantity.label(class="form-label") }}
+                {{ form.quantity(class="form-control", type="number", value=1, min=1, style="width: 100px;") }}
+                {% if form.quantity.errors %}
+                    <div class="alert alert-danger mt-1">{{ form.quantity.errors[0] }}</div>
+                {% endif %}
+            </div>
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+
         <a href="{{ url_for('products') }}" class="btn btn-outline-red mt-3">Back to Products</a>
     </div>
 </div>
