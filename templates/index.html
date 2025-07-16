@@ -5,7 +5,7 @@
 {% block content %}
 <div class="p-5 mb-4 bg-light rounded-3 animate-fade-in">
     <div class="container-fluid py-5 text-center">
-        <h1 class="display-4 fw-bold animate-slide-in-up"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" style="background-color: #000000; width: 400px; border-radius: 10px;"></h1>
+        <h1 class="display-4 fw-bold animate-slide-in-up"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" style="background-color: #000000; width: max-content; border-radius: 10px;"></h1>
         <p class="fs-5 col-md-8 mx-auto animate-slide-in-up" style="animation-delay: 0.2s;">Discover our amazing products and read our latest blog posts. We are dedicated to providing you with the best experience.</p>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
             <a class="btn btn-primary btn-lg px-4 me-sm-3 animate-slide-in-right" href="{{ url_for('products') }}" role="button" style="animation-delay: 0.4s;">View Products</a>
