@@ -259,7 +259,14 @@ def checkout_to_instagram():
         quantity = item.get('quantity', 0)
         price = item.get('price', 0.0)
         subtotal = quantity * price
-        order_details_message += f"{i+1}. {product_name} (x{quantity}) - ${price:,.0f} = ${subtotal:,.0f}\n"
+        product_id = item.get('product_id')
+        product_link = ""
+        if product_id:
+            product_link = url_for('product_detail', product_id=product_id, _external=True)
+            order_details_message += f"{i+1}. {product_name} (x{quantity}) - ${price:,.0f} = ${subtotal:,.0f}\n"
+            order_details_message += f"   Link Produk: {product_link}\n"
+        else:
+            order_details_message += f"{i+1}. {product_name} (x{quantity}) - ${price:,.0f} = ${subtotal:,.0f}\n"
 
     order_details_message += f"\nTotal price: ${total_price:,.0f}\n\n"
     order_details_message += "Please confirm this order via Instagram DM @benartwork777.\n"
